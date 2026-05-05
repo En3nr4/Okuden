@@ -1,11 +1,8 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro";
-import Breadcrumbs from "../../../components/Breadcrumbs.astro";
-import ApiPageHeader from "../../../components/ApiPageHeader.astro";
+import ApiLayout from "../../../layouts/ApiLayout.astro";
 import CodeBlock from "../../../components/CodeBlock.astro";
 import ParametersTable from "../../../components/ParametersTable.astro";
 import { getAllApis } from "../../../lib/data";
-import { dllPath, categoryPath } from "../../../lib/slug";
 
 export async function getStaticPaths() {
   const apis = await getAllApis();
@@ -18,16 +15,7 @@ export async function getStaticPaths() {
 const { api } = Astro.props;
 ---
 
-<BaseLayout title={api.name} description={api.description}>
-  <Breadcrumbs
-    crumbs={[
-      { label: api.dll, href: dllPath(api.dll) },
-      { label: api.category, href: categoryPath(api.dll, api.category) },
-      { label: api.name },
-    ]}
-  />
-  <ApiPageHeader name={api.name} dll={api.dll} tags={api.tags} />
-
+<ApiLayout api={api} active="overview">
   <p class="lead">{api.description}</p>
 
   <h2>Prototype</h2>
@@ -38,21 +26,14 @@ const { api } = Astro.props;
 
   <h2>Returns</h2>
   <p><code>{api.returnType}</code></p>
-</BaseLayout>
+</ApiLayout>
 
 <style>
-  .lead {
-    font-size: var(--fs-md);
-    color: var(--ink-soft);
-    margin: var(--sp-4) 0 var(--sp-5);
-  }
+  .lead { font-size: var(--fs-md); color: var(--ink-soft); margin: var(--sp-3) 0 var(--sp-5); }
   h2 {
-    margin-top: var(--sp-6);
-    margin-bottom: var(--sp-2);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: var(--fs-sm);
-    border-bottom: 1px solid var(--border);
+    margin-top: var(--sp-6); margin-bottom: var(--sp-2);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: var(--fs-sm); border-bottom: 1px solid var(--border);
     padding-bottom: var(--sp-2);
   }
 </style>

@@ -1,0 +1,74 @@
+---
+import ApiLayout from "../../../layouts/ApiLayout.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import { getAllApis, getAllVersions } from "../../../lib/data";
+
+export async function getStaticPaths() {
+  const apis = await getAllApis();
+  return apis
+    .filter((api) => api.tags.includes("syscall") && api.syscall)
+    .map((api) => ({
+      params: { name: api.name },
+      props: { api },
+    }));
+}
+
+const { api } = Astro.props;
+const versions = await getAllVersions();
+const ssn = api.syscall!.ssn;
+const hash = api.syscall!.hash;
+---
+
+<ApiLayout api={api} active="syscall">
+  <h2>Syscall Numbers</h2>
+  <table class="ssn">
+    <thead>
+      <tr><th>Version</th><th>Build</th><th>SSN (decimal)</th><th>SSN (hex)</th></tr>
+    </thead>
+    <tbody>
+      {versions.map((v) => {
+        const n = ssn[v.id];
+        return (
+          <tr>
+            <td>{v.displayName}</td>
+            <td class="mono">{v.buildNumber}</td>
+            <td class="mono">{n ?? "—"}</td>
+            <td class="mono">{n !== undefined ? `0x${n.toString(16)}` : "—"}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+
+  {hash && (
+    <>
+      <h2>Hashes</h2>
+      <table class="ssn">
+        <thead><tr><th>Algorithm</th><th>Value</th></tr></thead>
+        <tbody>
+          {Object.entries(hash).map(([algo, value]) => (
+            <tr><td class="mono">{algo}</td><td class="mono">{value}</td></tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  )}
+</ApiLayout>
+
+<style>
+  h2 {
+    margin-top: var(--sp-5); margin-bottom: var(--sp-2);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: var(--fs-sm); border-bottom: 1px solid var(--border);
+    padding-bottom: var(--sp-2);
+  }
+  .ssn { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); margin: var(--sp-3) 0; }
+  .ssn th {
+    background: var(--ink); color: var(--bg);
+    text-align: left; padding: var(--sp-2) var(--sp-3);
+    font-family: var(--font-mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+  }
+  .ssn td { padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--border); }
+  .mono { font-family: var(--font-mono); }
+</style>

@@ -1,0 +1,29 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import ApiPageHeader from "../components/ApiPageHeader.astro";
+import ApiTabs from "../components/ApiTabs.astro";
+import { dllPath, categoryPath } from "../lib/slug";
+import type { ApiEntry } from "../content.config";
+
+interface Props {
+  api: ApiEntry;
+  active: "overview" | "syscall" | "examples" | "used-by" | "source";
+}
+const { api, active } = Astro.props;
+const hasSyscall = api.tags.includes("syscall");
+---
+
+<BaseLayout title={api.name} description={api.description}>
+  <Breadcrumbs
+    crumbs={[
+      { label: api.dll, href: dllPath(api.dll) },
+      { label: api.category, href: categoryPath(api.dll, api.category) },
+      { label: api.name, href: active === "overview" ? undefined : `/api/${api.name}/` },
+      ...(active === "overview" ? [] : [{ label: active }]),
+    ]}
+  />
+  <ApiPageHeader name={api.name} dll={api.dll} tags={api.tags} />
+  <ApiTabs apiName={api.name} hasSyscall={hasSyscall} active={active} />
+  <slot />
+</BaseLayout>

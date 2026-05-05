@@ -1,0 +1,60 @@
+---
+interface Tab {
+  label: string;
+  href: string;
+  active: boolean;
+  visible: boolean;
+}
+interface Props {
+  apiName: string;
+  hasSyscall: boolean;
+  active: "overview" | "syscall" | "examples" | "used-by" | "source";
+}
+const { apiName, hasSyscall, active } = Astro.props;
+const base = `/api/${apiName}`;
+
+const tabs: Tab[] = [
+  { label: "Overview", href: `${base}/`, active: active === "overview", visible: true },
+  { label: "Syscall", href: `${base}/syscall/`, active: active === "syscall", visible: hasSyscall },
+  { label: "Examples", href: `${base}/examples/`, active: active === "examples", visible: true },
+  { label: "Used by", href: `${base}/used-by/`, active: active === "used-by", visible: true },
+  { label: "Source", href: `${base}/source/`, active: active === "source", visible: true },
+];
+---
+
+<nav class="tabs" aria-label="API sections">
+  {tabs.filter((t) => t.visible).map((t) => (
+    <a class:list={["tabs__tab", { "tabs__tab--active": t.active }]} href={t.href}>
+      {t.label}
+    </a>
+  ))}
+</nav>
+
+<style>
+  .tabs {
+    display: flex;
+    gap: 0;
+    background: var(--ink);
+    margin: 0 calc(var(--sp-5) * -1) var(--sp-5);
+    padding: 0 var(--sp-5);
+    border-top: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .tabs__tab {
+    color: var(--mute-soft);
+    text-decoration: none;
+    padding: var(--sp-3) var(--sp-4);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .tabs__tab:hover { color: var(--paper); }
+  .tabs__tab--active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+</style>
