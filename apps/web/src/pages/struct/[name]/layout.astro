@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import StructLayout from "../../../components/StructLayout.astro";
+import { getAllStructs, getAllVersions } from "../../../lib/data";
+
+export async function getStaticPaths() {
+  const structs = await getAllStructs();
+  return structs.map((struct) => ({
+    params: { name: struct.name },
+    props: { struct },
+  }));
+}
+
+const { struct } = Astro.props;
+const versions = await getAllVersions();
+---
+
+<BaseLayout title={`${struct.name} layout`} description={`Field offsets for ${struct.name} per Windows version.`}>
+  <Breadcrumbs
+    crumbs={[
+      { label: "structs", href: "/struct/" },
+      { label: struct.name, href: `/struct/${struct.name}/` },
+      { label: "layout" },
+    ]}
+  />
+
+  <header class="struct-header">
+    <h1>{struct.name}</h1>
+    <p class="sublead">Field layout per Windows version</p>
+  </header>
+
+  <nav class="tabs" aria-label="Struct sections">
+    <a class="tabs__tab" href={`/struct/${struct.name}/`}>Overview</a>
+    <a class="tabs__tab tabs__tab--active" href={`/struct/${struct.name}/layout/`}>Layout</a>
+    <a class="tabs__tab" href={`/struct/${struct.name}/used-by/`}>Used by</a>
+  </nav>
+
+  <StructLayout struct={struct} versions={versions} />
+</BaseLayout>
+
+<style>
+  .struct-header { margin-bottom: var(--sp-3); }
+  .struct-header h1 { font-family: var(--font-display); font-size: var(--fs-xl); }
+  .sublead { color: var(--mute); font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.12em; }
+
+  .tabs {
+    display: flex; gap: 0; background: var(--ink);
+    margin: var(--sp-4) calc(var(--sp-5) * -1) var(--sp-5);
+    padding: 0 var(--sp-5);
+    border-top: 1px solid var(--border);
+  }
+  .tabs__tab {
+    color: var(--mute-soft); text-decoration: none;
+    padding: var(--sp-3) var(--sp-4);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+    border-bottom: 3px solid transparent;
+  }
+  .tabs__tab:hover { color: var(--paper); }
+  .tabs__tab--active { color: var(--accent); border-bottom-color: var(--accent); }
+</style>

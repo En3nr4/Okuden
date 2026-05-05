@@ -1,0 +1,81 @@
+---
+import type { StructEntry, VersionEntry } from "../content.config";
+
+interface Props {
+  struct: StructEntry;
+  versions: VersionEntry[];
+}
+const { struct, versions } = Astro.props;
+const versionIds = versions.map((v) => v.id);
+---
+
+<table class="layout">
+  <thead>
+    <tr>
+      <th class="layout__col-name">Field</th>
+      <th class="layout__col-type">Type</th>
+      {versions.map((v) => (
+        <th class="layout__col-version">
+          <span class="version-name">{v.displayName}</span>
+          <span class="version-build">{v.buildNumber}</span>
+        </th>
+      ))}
+    </tr>
+  </thead>
+  <tbody>
+    {struct.fields.map((f) => (
+      <tr>
+        <td class="layout__name">{f.name}</td>
+        <td class="layout__type">{f.type}</td>
+        {versionIds.map((id) => {
+          const off = f.offsets[id];
+          const sz = f.size[id];
+          if (off === undefined) {
+            return <td class="layout__cell layout__cell--missing">—</td>;
+          }
+          return (
+            <td class="layout__cell">
+              <div class="off">+0x{off.toString(16).padStart(2, "0")}</div>
+              <div class="sz">{sz} byte{sz === 1 ? "" : "s"}</div>
+            </td>
+          );
+        })}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  .layout {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+    font-family: var(--font-mono);
+    margin: var(--sp-4) 0;
+  }
+  .layout th {
+    background: var(--ink);
+    color: var(--bg);
+    padding: var(--sp-2) var(--sp-3);
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .layout__col-version {
+    text-align: right;
+  }
+  .version-name { display: block; font-weight: 700; }
+  .version-build { display: block; color: var(--mute-soft); font-size: 9px; }
+  .layout td {
+    padding: var(--sp-2) var(--sp-3);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .layout__name { font-weight: 700; }
+  .layout__type { color: var(--mute); }
+  .layout__cell { text-align: right; }
+  .off { font-weight: 700; }
+  .sz { color: var(--mute); font-size: var(--fs-xs); }
+  .layout__cell--missing { color: var(--border); text-align: right; }
+</style>
