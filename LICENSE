@@ -1,0 +1,7 @@
+Okuden is a multi-license repository. Each package carries its own LICENSE file:
+
+  apps/web/LICENSE         MIT
+  packages/ingest/LICENSE  MIT
+  packages/data/LICENSE    CC BY-SA 4.0
+
+When in doubt, the LICENSE file colocated with the source you're using applies.
