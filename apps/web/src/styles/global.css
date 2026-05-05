@@ -131,3 +131,17 @@
   color: var(--mute);
   font-style: italic;
 }
+
+.version-select {
+  background: var(--accent);
+  color: var(--paper);
+  border: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: var(--sp-1) var(--sp-3);
+  cursor: pointer;
+  appearance: none;
+}
+.version-select:hover { filter: brightness(1.1); }

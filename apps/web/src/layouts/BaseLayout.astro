@@ -6,9 +6,8 @@ import Search from "../islands/Search.tsx";
 interface Props {
   title: string;
   description?: string;
-  currentVersion?: string;
 }
-const { title, description, currentVersion } = Astro.props;
+const { title, description } = Astro.props;
 const fullTitle = title === "Okuden" ? "Okuden" : `${title} · Okuden`;
 ---
 
@@ -24,7 +23,7 @@ const fullTitle = title === "Okuden" ? "Okuden" : `${title} · Okuden`;
     {description && <meta property="og:description" content={description} />}
   </head>
   <body>
-    <TopNav currentVersion={currentVersion} />
+    <TopNav />
     <main>
       <slot />
     </main>

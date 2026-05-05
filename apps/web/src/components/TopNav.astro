@@ -1,8 +1,5 @@
 ---
-interface Props {
-  currentVersion?: string;
-}
-const { currentVersion = "Win11 24H2" } = Astro.props;
+import VersionSelector from "../islands/VersionSelector.tsx";
 ---
 
 <nav class="topnav" data-pagefind-ignore="all">
@@ -19,7 +16,7 @@ const { currentVersion = "Win11 24H2" } = Astro.props;
     <span class="kbd">⌘K</span>
     <span class="search-text">Search</span>
   </button>
-  <span class="version-pill">{currentVersion}</span>
+  <VersionSelector client:load />
 </nav>
 
 <style>
@@ -84,13 +81,4 @@ const { currentVersion = "Win11 24H2" } = Astro.props;
     border-radius: 2px;
   }
 
-  .version-pill {
-    background: var(--accent);
-    color: var(--paper);
-    padding: var(--sp-1) var(--sp-3);
-    font-family: var(--font-mono);
-    font-size: var(--fs-xs);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-  }
 </style>
