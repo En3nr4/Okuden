@@ -29,6 +29,6 @@ function selfTest(schemaName) {
   return ok;
 }
 
-const ok = ["api", "struct"].every(selfTest);
+const ok = ["api", "struct", "version"].every(selfTest);
 if (!ok) process.exit(1);
 console.log("OK: schema fixtures behave as expected.");
