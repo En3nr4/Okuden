@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://okuden.dev/schemas/struct.schema.json",
+  "title": "Okuden struct entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "description", "fields", "usedBy", "source"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^_?[A-Za-z][A-Za-z0-9_]*$"
+    },
+    "description": { "type": "string", "minLength": 1 },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "type", "offsets", "size"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "minLength": 1 },
+          "offsets": {
+            "type": "object",
+            "additionalProperties": { "type": "integer", "minimum": 0 }
+          },
+          "size": {
+            "type": "object",
+            "additionalProperties": { "type": "integer", "minimum": 0 }
+          },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "usedBy": { "type": "array", "items": { "type": "string" } },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lastVerified"],
+      "properties": {
+        "pdb": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["module", "version"],
+          "properties": {
+            "module": { "type": "string" },
+            "version": { "type": "string" }
+          }
+        },
+        "phntPath": { "type": "string" },
+        "reactosPath": { "type": "string" },
+        "winePath": { "type": "string" },
+        "lastVerified": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}

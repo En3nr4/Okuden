@@ -1,0 +1,21 @@
+{
+  "name": "_PEB",
+  "description": "Process Environment Block. Per-process structure pointed to by gs:[0x60] on x64.",
+  "fields": [
+    {
+      "name": "InheritedAddressSpace",
+      "type": "BOOLEAN",
+      "offsets": { "win11-24h2": 0 },
+      "size": { "win11-24h2": 1 }
+    },
+    {
+      "name": "Ldr",
+      "type": "PPEB_LDR_DATA",
+      "offsets": { "win11-24h2": 24 },
+      "size": { "win11-24h2": 8 },
+      "description": "Pointer to loader data (PEB_LDR_DATA)."
+    }
+  ],
+  "usedBy": ["NtQueryInformationProcess"],
+  "source": { "lastVerified": "2026-05-05" }
+}

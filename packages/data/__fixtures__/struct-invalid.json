@@ -1,0 +1,9 @@
+{
+  "name": "1bad name",
+  "description": "",
+  "fields": [
+    { "name": "x", "type": "int", "offsets": { "v": -1 }, "size": { "v": 4 } }
+  ],
+  "usedBy": [],
+  "source": { "lastVerified": "1999/01/01" }
+}
