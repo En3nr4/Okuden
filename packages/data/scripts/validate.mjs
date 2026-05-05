@@ -1,10 +1,9 @@
 #!/usr/bin/env node
-// Minimal validator. Task 5 expands it to walk the full dataset.
 import Ajv from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { dirname, resolve, join } from "node:path";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
@@ -12,23 +11,58 @@ const root = resolve(here, "..");
 const ajv = new Ajv({ allErrors: true, strict: true });
 addFormats(ajv);
 
-function selfTest(schemaName) {
-  const schema = JSON.parse(readFileSync(resolve(root, `schemas/${schemaName}.schema.json`), "utf-8"));
-  const validate = ajv.compile(schema);
-  const valid = JSON.parse(readFileSync(resolve(root, `__fixtures__/${schemaName}-valid.json`), "utf-8"));
-  const invalid = JSON.parse(readFileSync(resolve(root, `__fixtures__/${schemaName}-invalid.json`), "utf-8"));
-  let ok = true;
-  if (!validate(valid)) {
-    console.error(`FAIL: ${schemaName}-valid.json was rejected:`, validate.errors);
-    ok = false;
-  }
-  if (validate(invalid)) {
-    console.error(`FAIL: ${schemaName}-invalid.json was accepted (should be rejected).`);
-    ok = false;
-  }
-  return ok;
+const validators = {};
+for (const name of ["api", "struct", "version"]) {
+  const schema = JSON.parse(readFileSync(resolve(root, `schemas/${name}.schema.json`), "utf-8"));
+  validators[name] = ajv.compile(schema);
 }
 
-const ok = ["api", "struct", "version"].every(selfTest);
-if (!ok) process.exit(1);
-console.log("OK: schema fixtures behave as expected.");
+let failed = 0;
+let checked = 0;
+
+// 1. Fixture self-tests (regressed if a schema becomes too lax/strict)
+for (const name of ["api", "struct", "version"]) {
+  const valid = JSON.parse(readFileSync(resolve(root, `__fixtures__/${name}-valid.json`), "utf-8"));
+  const invalid = JSON.parse(readFileSync(resolve(root, `__fixtures__/${name}-invalid.json`), "utf-8"));
+  if (!validators[name](valid)) {
+    console.error(`FAIL [fixture]: ${name}-valid was rejected:`, validators[name].errors);
+    failed++;
+  }
+  if (validators[name](invalid)) {
+    console.error(`FAIL [fixture]: ${name}-invalid was accepted (should be rejected).`);
+    failed++;
+  }
+  checked += 2;
+}
+
+// 2. Walk real dataset
+for (const kind of ["api", "struct", "version"]) {
+  const dir = resolve(root, kind);
+  if (!existsSync(dir)) continue;
+  for (const file of readdirSync(dir)) {
+    if (!file.endsWith(".json")) continue;
+    const path = join(dir, file);
+    let data;
+    try {
+      data = JSON.parse(readFileSync(path, "utf-8"));
+    } catch (err) {
+      console.error(`FAIL [parse]: ${path}: ${err.message}`);
+      failed++;
+      continue;
+    }
+    if (!validators[kind](data)) {
+      console.error(`FAIL [schema]: ${path}:`);
+      for (const e of validators[kind].errors) {
+        console.error(`  ${e.instancePath || "(root)"} ${e.message}`);
+      }
+      failed++;
+    }
+    checked++;
+  }
+}
+
+if (failed > 0) {
+  console.error(`\n${failed} failures across ${checked} checks.`);
+  process.exit(1);
+}
+console.log(`OK: ${checked} files validated.`);
