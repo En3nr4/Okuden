@@ -2,6 +2,7 @@
 import ApiLayout from "../../../layouts/ApiLayout.astro";
 import { getAllApis, getAllStructs } from "../../../lib/data";
 import { apiPath, structPath } from "../../../lib/slug";
+import EmbeddedGraph from "../../../components/EmbeddedGraph.astro";
 
 export async function getStaticPaths() {
   const apis = await getAllApis();
@@ -24,6 +25,9 @@ function structLink(name: string) {
 ---
 
 <ApiLayout api={api} active="used-by">
+  <h2 class="graph-heading">Mini graph</h2>
+  <EmbeddedGraph centerApiName={api.name} height={280} />
+
   <section class="rels">
     <h2>Used by</h2>
     {api.usedBy.length === 0 ? (
@@ -80,6 +84,14 @@ function structLink(name: string) {
 </ApiLayout>
 
 <style>
+  .graph-heading {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: var(--fs-sm);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: var(--sp-2);
+    margin-top: var(--sp-4);
+  }
   .rels { margin: var(--sp-4) 0; }
   .rels h2 {
     text-transform: uppercase; letter-spacing: 0.08em;

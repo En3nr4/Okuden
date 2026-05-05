@@ -1,0 +1,56 @@
+---
+import DepGraph from "../islands/DepGraph.tsx";
+import { getAllApis, getAllStructs } from "../lib/data";
+import { apiPath, structPath } from "../lib/slug";
+
+interface Props {
+  centerApiName: string;
+  height?: number;
+}
+const { centerApiName, height = 320 } = Astro.props;
+
+const apis = await getAllApis();
+const structs = await getAllStructs();
+const center = apis.find((a) => a.name === centerApiName);
+
+const nodes: Array<{ id: string; label: string; type: "api" | "struct"; href: string }> = [];
+const edges: Array<{ source: string; target: string }> = [];
+
+if (center) {
+  nodes.push({ id: `api:${center.name}`, label: center.name, type: "api", href: apiPath(center.name) });
+  const apisByName = new Map(apis.map((a) => [a.name, a]));
+  const structsByName = new Map(structs.map((s) => [s.name, s]));
+
+  for (const callee of center.calls) {
+    const a = apisByName.get(callee);
+    if (a) {
+      nodes.push({ id: `api:${a.name}`, label: a.name, type: "api", href: apiPath(a.name) });
+      edges.push({ source: `api:${center.name}`, target: `api:${a.name}` });
+    }
+  }
+  for (const struct of center.structsUsed) {
+    const s = structsByName.get(struct);
+    if (s) {
+      nodes.push({ id: `struct:${s.name}`, label: s.name, type: "struct", href: structPath(s.name) });
+      edges.push({ source: `api:${center.name}`, target: `struct:${s.name}` });
+    }
+  }
+  for (const caller of center.usedBy) {
+    const a = apisByName.get(caller);
+    if (a) {
+      nodes.push({ id: `api:${a.name}`, label: a.name, type: "api", href: apiPath(a.name) });
+      edges.push({ source: `api:${a.name}`, target: `api:${center.name}` });
+    }
+  }
+}
+---
+
+{nodes.length <= 1 ? (
+  <p class="empty">Not enough graph data yet for {centerApiName}.</p>
+) : (
+  <DepGraph nodes={nodes} edges={edges} height={height} client:only="react" />
+)}
+
+<style>
+  .empty { color: var(--mute); font-style: italic; margin: var(--sp-4) 0; }
+</style>

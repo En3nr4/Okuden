@@ -179,3 +179,9 @@
 .filters__check input[type="checkbox"] {
   accent-color: var(--accent);
 }
+.depgraph {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--ink);
+  margin: var(--sp-4) 0;
+}

@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DepGraph from "../islands/DepGraph.tsx";
+import { getAllApis, getAllStructs } from "../lib/data";
+import { apiPath, structPath } from "../lib/slug";
+
+const apis = await getAllApis();
+const structs = await getAllStructs();
+
+const nodes = [
+  ...apis.map((a) => ({ id: `api:${a.name}`, label: a.name, type: "api" as const, href: apiPath(a.name) })),
+  ...structs.map((s) => ({ id: `struct:${s.name}`, label: s.name, type: "struct" as const, href: structPath(s.name) })),
+];
+
+const edges: Array<{ source: string; target: string }> = [];
+for (const api of apis) {
+  for (const callee of api.calls) {
+    edges.push({ source: `api:${api.name}`, target: `api:${callee}` });
+  }
+  for (const used of api.structsUsed) {
+    edges.push({ source: `api:${api.name}`, target: `struct:${used}` });
+  }
+}
+
+// Drop edges that point at nodes not in the dataset (avoid Cytoscape errors)
+const nodeIds = new Set(nodes.map((n) => n.id));
+const validEdges = edges.filter((e) => nodeIds.has(e.source) && nodeIds.has(e.target));
+---
+
+<BaseLayout
+  title="Dependency graph"
+  description="Visual graph of API and struct relationships in Okuden."
+>
+  <h1>Dependency graph</h1>
+  <p class="lead">
+    Drag nodes to reposition. Click a node to jump to its page. Black squares are APIs;
+    red squares are structs.
+  </p>
+  <DepGraph nodes={nodes} edges={validEdges} height={700} client:only="react" />
+</BaseLayout>
+
+<style>
+  h1 { font-family: var(--font-display); font-size: var(--fs-2xl); }
+  .lead { color: var(--ink-soft); margin: var(--sp-3) 0 var(--sp-4); }
+</style>
