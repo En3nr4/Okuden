@@ -1,0 +1,23 @@
+{
+  "name": "CreateFileW",
+  "dll": "kernel32",
+  "category": "file",
+  "description": "Creates or opens a file or I/O device. The Win32 wrapper around NtCreateFile that accepts a Unicode path string.",
+  "prototype": "HANDLE CreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);",
+  "parameters": [
+    { "name": "lpFileName", "type": "LPCWSTR", "direction": "in" },
+    { "name": "dwDesiredAccess", "type": "DWORD", "direction": "in" },
+    { "name": "dwShareMode", "type": "DWORD", "direction": "in" },
+    { "name": "lpSecurityAttributes", "type": "LPSECURITY_ATTRIBUTES", "direction": "in" },
+    { "name": "dwCreationDisposition", "type": "DWORD", "direction": "in" },
+    { "name": "dwFlagsAndAttributes", "type": "DWORD", "direction": "in" },
+    { "name": "hTemplateFile", "type": "HANDLE", "direction": "in" }
+  ],
+  "returnType": "HANDLE",
+  "tags": [],
+  "usedBy": [],
+  "calls": ["NtCreateFile"],
+  "structsUsed": [],
+  "examples": [],
+  "source": { "lastVerified": "2026-05-05" }
+}

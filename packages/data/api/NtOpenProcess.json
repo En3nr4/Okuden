@@ -1,0 +1,32 @@
+{
+  "name": "NtOpenProcess",
+  "dll": "ntdll",
+  "category": "process",
+  "description": "Opens a handle to an existing process by client ID, with the requested access. Underlies kernel32!OpenProcess.",
+  "prototype": "NTSTATUS NtOpenProcess(PHANDLE ProcessHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, PCLIENT_ID ClientId);",
+  "parameters": [
+    { "name": "ProcessHandle", "type": "PHANDLE", "direction": "out" },
+    { "name": "DesiredAccess", "type": "ACCESS_MASK", "direction": "in" },
+    { "name": "ObjectAttributes", "type": "POBJECT_ATTRIBUTES", "direction": "in" },
+    { "name": "ClientId", "type": "PCLIENT_ID", "direction": "in" }
+  ],
+  "returnType": "NTSTATUS",
+  "tags": ["syscall", "partial"],
+  "syscall": {
+    "ssn": { "win10-22h2": 38, "win11-23h2": 38, "win11-24h2": 38 }
+  },
+  "usedBy": ["OpenProcess"],
+  "calls": [],
+  "structsUsed": ["_OBJECT_ATTRIBUTES"],
+  "examples": [
+    {
+      "language": "asm",
+      "title": "Direct syscall stub (x64)",
+      "code": "; NtOpenProcess direct syscall — Win11 24H2 SSN 0x26\nmov r10, rcx\nmov eax, 0x26\nsyscall\nret"
+    }
+  ],
+  "source": {
+    "phntPath": "phnt/ntpsapi.h",
+    "lastVerified": "2026-05-05"
+  }
+}

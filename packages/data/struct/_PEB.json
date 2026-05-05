@@ -1,0 +1,49 @@
+{
+  "name": "_PEB",
+  "description": "Process Environment Block. Per-process structure pointed to by gs:[0x60] on x64 (fs:[0x30] on x86). Holds loader data, command line, environment block, image base, and many other process-wide fields.",
+  "fields": [
+    {
+      "name": "InheritedAddressSpace",
+      "type": "BOOLEAN",
+      "offsets": { "win10-22h2": 0, "win11-23h2": 0, "win11-24h2": 0 },
+      "size": { "win10-22h2": 1, "win11-23h2": 1, "win11-24h2": 1 }
+    },
+    {
+      "name": "ReadImageFileExecOptions",
+      "type": "BOOLEAN",
+      "offsets": { "win10-22h2": 1, "win11-23h2": 1, "win11-24h2": 1 },
+      "size": { "win10-22h2": 1, "win11-23h2": 1, "win11-24h2": 1 }
+    },
+    {
+      "name": "BeingDebugged",
+      "type": "BOOLEAN",
+      "offsets": { "win10-22h2": 2, "win11-23h2": 2, "win11-24h2": 2 },
+      "size": { "win10-22h2": 1, "win11-23h2": 1, "win11-24h2": 1 },
+      "description": "Set by NtSetInformationProcess on attach. Common anti-debug check target."
+    },
+    {
+      "name": "ImageBaseAddress",
+      "type": "PVOID",
+      "offsets": { "win10-22h2": 16, "win11-23h2": 16, "win11-24h2": 16 },
+      "size": { "win10-22h2": 8, "win11-23h2": 8, "win11-24h2": 8 }
+    },
+    {
+      "name": "Ldr",
+      "type": "PPEB_LDR_DATA",
+      "offsets": { "win10-22h2": 24, "win11-23h2": 24, "win11-24h2": 24 },
+      "size": { "win10-22h2": 8, "win11-23h2": 8, "win11-24h2": 8 },
+      "description": "Pointer to PEB_LDR_DATA — the doubly-linked list of loaded modules."
+    },
+    {
+      "name": "ProcessParameters",
+      "type": "PRTL_USER_PROCESS_PARAMETERS",
+      "offsets": { "win10-22h2": 32, "win11-23h2": 32, "win11-24h2": 32 },
+      "size": { "win10-22h2": 8, "win11-23h2": 8, "win11-24h2": 8 }
+    }
+  ],
+  "usedBy": ["NtQueryInformationProcess"],
+  "source": {
+    "phntPath": "phnt/ntpebteb.h",
+    "lastVerified": "2026-05-05"
+  }
+}

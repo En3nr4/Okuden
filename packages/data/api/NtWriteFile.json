@@ -1,0 +1,31 @@
+{
+  "name": "NtWriteFile",
+  "dll": "ntdll",
+  "category": "file",
+  "description": "Writes data to a file or device handle previously obtained from NtCreateFile/NtOpenFile.",
+  "prototype": "NTSTATUS NtWriteFile(HANDLE FileHandle, HANDLE Event, PIO_APC_ROUTINE ApcRoutine, PVOID ApcContext, PIO_STATUS_BLOCK IoStatusBlock, PVOID Buffer, ULONG Length, PLARGE_INTEGER ByteOffset, PULONG Key);",
+  "parameters": [
+    { "name": "FileHandle", "type": "HANDLE", "direction": "in" },
+    { "name": "Event", "type": "HANDLE", "direction": "in" },
+    { "name": "ApcRoutine", "type": "PIO_APC_ROUTINE", "direction": "in" },
+    { "name": "ApcContext", "type": "PVOID", "direction": "in" },
+    { "name": "IoStatusBlock", "type": "PIO_STATUS_BLOCK", "direction": "out" },
+    { "name": "Buffer", "type": "PVOID", "direction": "in" },
+    { "name": "Length", "type": "ULONG", "direction": "in" },
+    { "name": "ByteOffset", "type": "PLARGE_INTEGER", "direction": "in" },
+    { "name": "Key", "type": "PULONG", "direction": "in" }
+  ],
+  "returnType": "NTSTATUS",
+  "tags": ["syscall", "partial"],
+  "syscall": {
+    "ssn": { "win10-22h2": 8, "win11-23h2": 8, "win11-24h2": 8 }
+  },
+  "usedBy": ["WriteFile"],
+  "calls": [],
+  "structsUsed": ["_IO_STATUS_BLOCK"],
+  "examples": [],
+  "source": {
+    "phntPath": "phnt/ntioapi.h",
+    "lastVerified": "2026-05-05"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "VirtualAlloc",
+  "dll": "kernel32",
+  "category": "memory",
+  "description": "Reserves, commits, or changes the state of a region of pages in the calling process's virtual address space.",
+  "prototype": "LPVOID VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);",
+  "parameters": [
+    { "name": "lpAddress", "type": "LPVOID", "direction": "in" },
+    { "name": "dwSize", "type": "SIZE_T", "direction": "in" },
+    { "name": "flAllocationType", "type": "DWORD", "direction": "in" },
+    { "name": "flProtect", "type": "DWORD", "direction": "in" }
+  ],
+  "returnType": "LPVOID",
+  "tags": [],
+  "usedBy": [],
+  "calls": ["NtAllocateVirtualMemory"],
+  "structsUsed": [],
+  "examples": [],
+  "source": { "lastVerified": "2026-05-05" }
+}

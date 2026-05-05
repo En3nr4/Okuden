@@ -1,0 +1,49 @@
+{
+  "name": "_OBJECT_ATTRIBUTES",
+  "description": "Specifies attributes for an object handle creation: target name, root directory, security descriptor, and behavior flags. Required by every Nt* API that opens or creates an object.",
+  "fields": [
+    {
+      "name": "Length",
+      "type": "ULONG",
+      "offsets": { "win10-22h2": 0, "win11-23h2": 0, "win11-24h2": 0 },
+      "size": { "win10-22h2": 4, "win11-23h2": 4, "win11-24h2": 4 },
+      "description": "sizeof(OBJECT_ATTRIBUTES). Caller MUST set this; kernel rejects mismatched sizes."
+    },
+    {
+      "name": "RootDirectory",
+      "type": "HANDLE",
+      "offsets": { "win10-22h2": 8, "win11-23h2": 8, "win11-24h2": 8 },
+      "size": { "win10-22h2": 8, "win11-23h2": 8, "win11-24h2": 8 }
+    },
+    {
+      "name": "ObjectName",
+      "type": "PUNICODE_STRING",
+      "offsets": { "win10-22h2": 16, "win11-23h2": 16, "win11-24h2": 16 },
+      "size": { "win10-22h2": 8, "win11-23h2": 8, "win11-24h2": 8 }
+    },
+    {
+      "name": "Attributes",
+      "type": "ULONG",
+      "offsets": { "win10-22h2": 24, "win11-23h2": 24, "win11-24h2": 24 },
+      "size": { "win10-22h2": 4, "win11-23h2": 4, "win11-24h2": 4 },
+      "description": "OBJ_* flags (OBJ_CASE_INSENSITIVE, OBJ_INHERIT, OBJ_KERNEL_HANDLE, ...)."
+    },
+    {
+      "name": "SecurityDescriptor",
+      "type": "PVOID",
+      "offsets": { "win10-22h2": 32, "win11-23h2": 32, "win11-24h2": 32 },
+      "size": { "win10-22h2": 8, "win11-23h2": 8, "win11-24h2": 8 }
+    },
+    {
+      "name": "SecurityQualityOfService",
+      "type": "PVOID",
+      "offsets": { "win10-22h2": 40, "win11-23h2": 40, "win11-24h2": 40 },
+      "size": { "win10-22h2": 8, "win11-23h2": 8, "win11-24h2": 8 }
+    }
+  ],
+  "usedBy": ["NtCreateFile", "NtOpenProcess", "NtOpenFile"],
+  "source": {
+    "phntPath": "phnt/ntbasic.h",
+    "lastVerified": "2026-05-05"
+  }
+}

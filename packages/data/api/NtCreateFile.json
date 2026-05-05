@@ -1,0 +1,40 @@
+{
+  "name": "NtCreateFile",
+  "dll": "ntdll",
+  "category": "file",
+  "description": "Creates or opens a file or device, returning a handle. The kernel-mode primitive behind CreateFileW; takes an OBJECT_ATTRIBUTES rather than a path string.",
+  "prototype": "NTSTATUS NtCreateFile(PHANDLE FileHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, PIO_STATUS_BLOCK IoStatusBlock, PLARGE_INTEGER AllocationSize, ULONG FileAttributes, ULONG ShareAccess, ULONG CreateDisposition, ULONG CreateOptions, PVOID EaBuffer, ULONG EaLength);",
+  "parameters": [
+    { "name": "FileHandle", "type": "PHANDLE", "direction": "out", "description": "Receives the resulting handle on success." },
+    { "name": "DesiredAccess", "type": "ACCESS_MASK", "direction": "in" },
+    { "name": "ObjectAttributes", "type": "POBJECT_ATTRIBUTES", "direction": "in" },
+    { "name": "IoStatusBlock", "type": "PIO_STATUS_BLOCK", "direction": "out" },
+    { "name": "AllocationSize", "type": "PLARGE_INTEGER", "direction": "in" },
+    { "name": "FileAttributes", "type": "ULONG", "direction": "in" },
+    { "name": "ShareAccess", "type": "ULONG", "direction": "in" },
+    { "name": "CreateDisposition", "type": "ULONG", "direction": "in" },
+    { "name": "CreateOptions", "type": "ULONG", "direction": "in" },
+    { "name": "EaBuffer", "type": "PVOID", "direction": "in" },
+    { "name": "EaLength", "type": "ULONG", "direction": "in" }
+  ],
+  "returnType": "NTSTATUS",
+  "tags": ["syscall", "partial"],
+  "syscall": {
+    "ssn": { "win10-22h2": 85, "win11-23h2": 85, "win11-24h2": 85 }
+  },
+  "usedBy": ["CreateFileW"],
+  "calls": [],
+  "structsUsed": ["_OBJECT_ATTRIBUTES", "_IO_STATUS_BLOCK"],
+  "examples": [
+    {
+      "language": "asm",
+      "title": "Direct syscall stub (x64)",
+      "code": "; NtCreateFile direct syscall — Win11 24H2 SSN 0x55\nmov r10, rcx\nmov eax, 0x55\nsyscall\nret"
+    }
+  ],
+  "source": {
+    "phntPath": "phnt/ntioapi.h",
+    "reactosPath": "ntoskrnl/io/iomgr/file.c",
+    "lastVerified": "2026-05-05"
+  }
+}

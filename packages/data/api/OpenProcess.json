@@ -1,0 +1,19 @@
+{
+  "name": "OpenProcess",
+  "dll": "kernel32",
+  "category": "process",
+  "description": "Opens an existing local process object by PID with the specified access rights.",
+  "prototype": "HANDLE OpenProcess(DWORD dwDesiredAccess, BOOL bInheritHandle, DWORD dwProcessId);",
+  "parameters": [
+    { "name": "dwDesiredAccess", "type": "DWORD", "direction": "in" },
+    { "name": "bInheritHandle", "type": "BOOL", "direction": "in" },
+    { "name": "dwProcessId", "type": "DWORD", "direction": "in" }
+  ],
+  "returnType": "HANDLE",
+  "tags": [],
+  "usedBy": [],
+  "calls": ["NtOpenProcess"],
+  "structsUsed": [],
+  "examples": [],
+  "source": { "lastVerified": "2026-05-05" }
+}

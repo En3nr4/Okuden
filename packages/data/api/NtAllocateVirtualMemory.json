@@ -1,0 +1,28 @@
+{
+  "name": "NtAllocateVirtualMemory",
+  "dll": "ntdll",
+  "category": "memory",
+  "description": "Reserves, commits, or both, a region of pages within the user-mode virtual address space of a specified process. Underlies kernel32!VirtualAlloc and VirtualAllocEx.",
+  "prototype": "NTSTATUS NtAllocateVirtualMemory(HANDLE ProcessHandle, PVOID *BaseAddress, ULONG_PTR ZeroBits, PSIZE_T RegionSize, ULONG AllocationType, ULONG Protect);",
+  "parameters": [
+    { "name": "ProcessHandle", "type": "HANDLE", "direction": "in" },
+    { "name": "BaseAddress", "type": "PVOID*", "direction": "inout" },
+    { "name": "ZeroBits", "type": "ULONG_PTR", "direction": "in" },
+    { "name": "RegionSize", "type": "PSIZE_T", "direction": "inout" },
+    { "name": "AllocationType", "type": "ULONG", "direction": "in" },
+    { "name": "Protect", "type": "ULONG", "direction": "in" }
+  ],
+  "returnType": "NTSTATUS",
+  "tags": ["syscall", "partial"],
+  "syscall": {
+    "ssn": { "win10-22h2": 24, "win11-23h2": 24, "win11-24h2": 24 }
+  },
+  "usedBy": ["VirtualAlloc", "VirtualAllocEx"],
+  "calls": [],
+  "structsUsed": [],
+  "examples": [],
+  "source": {
+    "phntPath": "phnt/ntmmapi.h",
+    "lastVerified": "2026-05-05"
+  }
+}
