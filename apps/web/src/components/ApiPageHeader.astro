@@ -1,0 +1,39 @@
+---
+import Tag from "./Tag.astro";
+
+interface Props {
+  name: string;
+  dll: string;
+  tags: string[];
+}
+const { name, dll, tags } = Astro.props;
+const undocBadge = tags.find((t) => t === "undocumented" || t === "partial");
+const dllUpper = dll.toUpperCase();
+---
+
+<header class="api-header">
+  <h1 class="api-header__name">{name}</h1>
+  <div class="api-header__tags">
+    <Tag variant="default">{dllUpper}</Tag>
+    {tags.map((t) => (
+      <Tag variant={t === "undocumented" || t === "partial" ? "accent" : "default"}>
+        {t}
+      </Tag>
+    ))}
+  </div>
+</header>
+
+<style>
+  .api-header {
+    margin-bottom: var(--sp-5);
+  }
+  .api-header__name {
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    margin-bottom: var(--sp-2);
+  }
+  .api-header__tags {
+    display: inline-flex;
+    gap: 0;
+  }
+</style>
