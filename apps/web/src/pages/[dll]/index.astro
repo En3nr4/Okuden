@@ -5,9 +5,8 @@ import Tag from "../../components/Tag.astro";
 import { getAllApis } from "../../lib/data";
 import { apiPath, categoryPath } from "../../lib/slug";
 
-const SUPPORTED_DLLS = ["ntdll", "kernel32", "kernelbase", "advapi32", "user32", "ws2_32"] as const;
-
 export async function getStaticPaths() {
+  const SUPPORTED_DLLS = ["ntdll", "kernel32", "kernelbase", "advapi32", "user32", "ws2_32"] as const;
   return SUPPORTED_DLLS.map((dll) => ({ params: { dll } }));
 }
 
