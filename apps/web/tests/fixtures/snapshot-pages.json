@@ -1,0 +1,9 @@
+{
+  "pages": [
+    { "path": "dist/index.html", "expect": ["Okuden", "Public reference for Windows internal APIs"] },
+    { "path": "dist/api/NtCreateFile/index.html", "expect": ["NtCreateFile", "Prototype", "Parameters", "FileHandle"] },
+    { "path": "dist/api/NtCreateFile/syscall/index.html", "expect": ["NtCreateFile", "Syscall Numbers", "Win11 24H2"] },
+    { "path": "dist/struct/_PEB/layout/index.html", "expect": ["_PEB", "BeingDebugged", "Ldr"] },
+    { "path": "dist/ntdll/index.html", "expect": ["NTDLL", "NtCreateFile", "NtAllocateVirtualMemory"] }
+  ]
+}
