@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="About"
+  description="What Okuden is, where its data comes from, and how to contribute."
+>
+  <h1>About</h1>
+
+  <h2>What this is</h2>
+  <p>
+    Okuden (奥伝) — "secret transmission" — is a public reference for Windows internal APIs.
+    It indexes ntdll syscalls, undocumented helpers, Win32 user-mode DLLs, and internal
+    structures, with version-aware metadata (syscall numbers per Windows build, struct field
+    offsets per build, etc.).
+  </p>
+
+  <h2>Where the data comes from</h2>
+  <p>The Okuden ingest pipeline (see Plan 3 in the repo) pulls data from:</p>
+  <ul>
+    <li><strong>Microsoft PDBs</strong> — symbols and struct layouts, fetched from Microsoft's symbol server</li>
+    <li><strong>phnt headers</strong> (Process Hacker / SystemInformer) — undocumented prototypes</li>
+    <li><strong>ReactOS / Wine sources</strong> — behavior cross-references</li>
+    <li><strong>j00ru's syscall tables</strong> — SSN values per Windows build</li>
+  </ul>
+  <p>Every page has a <strong>Source</strong> tab linking the specific provenance for that entry.</p>
+
+  <h2>How to contribute</h2>
+  <p>
+    Open a pull request against <a href="https://github.com/En3nr4/Okuden"><code>En3nr4/Okuden</code></a>.
+    Edit the JSON files under <code>packages/data/</code> and ensure <code>pnpm validate:data</code>
+    passes — that's the only gate.
+  </p>
+
+  <h2>License</h2>
+  <p>
+    The site code is MIT, the dataset is CC BY-SA 4.0. See per-package <code>LICENSE</code> files
+    in the repo for details.
+  </p>
+</BaseLayout>
+
+<style>
+  h1 { font-family: var(--font-display); font-size: var(--fs-2xl); margin-bottom: var(--sp-4); }
+  h2 {
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: var(--fs-sm); border-bottom: 1px solid var(--border);
+    padding-bottom: var(--sp-2); margin-top: var(--sp-6);
+  }
+  ul { padding-left: var(--sp-5); }
+  ul li { margin: var(--sp-2) 0; }
+</style>

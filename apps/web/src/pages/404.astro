@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="404" description="Not found.">
+  <section class="nf">
+    <h1>404</h1>
+    <p>This page does not exist (yet).</p>
+    <p>
+      Try the <a href="/">homepage</a>, or use <kbd>⌘K</kbd> to search.
+      If you think this should be a real page, open an issue on <a href="https://github.com/En3nr4/Okuden">GitHub</a>.
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf { padding: var(--sp-8) 0; }
+  .nf h1 { font-family: var(--font-display); font-size: 6rem; color: var(--accent); line-height: 1; }
+  .nf p { color: var(--ink-soft); margin-top: var(--sp-3); }
+  kbd { background: var(--ink); color: var(--bg); padding: 1px 4px; font-family: var(--font-mono); font-size: var(--fs-xs); }
+</style>

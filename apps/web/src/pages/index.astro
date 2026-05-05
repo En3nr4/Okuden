@@ -1,8 +1,75 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getAllApis, getAllStructs, getAllVersions, getCurrentVersion } from "../lib/data";
+
+const apis = await getAllApis();
+const structs = await getAllStructs();
+const versions = await getAllVersions();
+const current = await getCurrentVersion();
 ---
 
-<BaseLayout title="Okuden" description="Public web reference for Windows internal APIs.">
-  <h1>Okuden — bootstrapping</h1>
-  <p>This page is replaced in Task 20.</p>
+<BaseLayout
+  title="Okuden"
+  description="Public web reference for Windows internal APIs — ntdll syscalls, undocumented helpers, Win32 user-mode DLLs, internal structures."
+>
+  <section class="hero">
+    <h1>Okuden <span class="hero__kanji">奥伝</span></h1>
+    <p class="hero__lead">
+      Public reference for Windows internal APIs. ntdll syscalls and undocumented helpers,
+      Win32 user-mode DLLs, internal structures (PEB, TEB, OBJECT_ATTRIBUTES, …).
+    </p>
+    <div class="hero__stats">
+      <div><span class="stat__num">{apis.length}</span><span class="stat__label">APIs</span></div>
+      <div><span class="stat__num">{structs.length}</span><span class="stat__label">structs</span></div>
+      <div><span class="stat__num">{versions.length}</span><span class="stat__label">Win versions</span></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Browse</h2>
+    <ul class="ctlinks">
+      <li><a href="/ntdll/">NTDLL — syscalls and undocumented helpers</a></li>
+      <li><a href="/kernel32/">KERNEL32 — Win32 user-mode wrappers</a></li>
+      <li><a href="/struct/">STRUCTS — PEB, TEB, OBJECT_ATTRIBUTES, …</a></li>
+      <li><a href="/graph/">GRAPH — full dependency graph</a></li>
+    </ul>
+  </section>
+
+  <section class="meta">
+    <p>
+      Current Windows version: <strong>{current.displayName}</strong> ({current.buildNumber}, released {current.releaseDate}).
+    </p>
+    <p>
+      Press <kbd>⌘K</kbd> or <kbd>/</kbd> to search.
+      Source on <a href="https://github.com/En3nr4/Okuden">GitHub</a>.
+      <a href="/about/">About this project</a>.
+    </p>
+  </section>
 </BaseLayout>
+
+<style>
+  .hero { padding: var(--sp-6) 0; }
+  .hero h1 { font-family: var(--font-display); font-size: var(--fs-2xl); display: flex; align-items: baseline; gap: var(--sp-3); }
+  .hero__kanji { color: var(--accent); font-size: 0.7em; }
+  .hero__lead { font-size: var(--fs-md); color: var(--ink-soft); margin: var(--sp-3) 0 var(--sp-5); max-width: 60ch; }
+  .hero__stats {
+    display: flex; gap: var(--sp-6); border-top: 4px solid var(--accent);
+    background: var(--ink); color: var(--bg); padding: var(--sp-3) var(--sp-5);
+  }
+  .hero__stats div { display: flex; flex-direction: column; gap: var(--sp-1); }
+  .stat__num { font-family: var(--font-mono); font-size: var(--fs-xl); font-weight: 700; color: var(--accent); }
+  .stat__label { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.12em; color: var(--mute-soft); }
+
+  .cta { margin: var(--sp-6) 0; }
+  .cta h2 {
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: var(--fs-sm); border-bottom: 1px solid var(--border);
+    padding-bottom: var(--sp-2);
+  }
+  .ctlinks { list-style: none; padding: 0; margin: var(--sp-3) 0; }
+  .ctlinks li { padding: var(--sp-2) 0; border-bottom: 1px solid var(--border); }
+  .ctlinks a { font-family: var(--font-mono); font-size: var(--fs-sm); }
+
+  .meta { margin-top: var(--sp-6); color: var(--mute); font-size: var(--fs-sm); }
+  kbd { background: var(--ink); color: var(--bg); padding: 1px 4px; font-family: var(--font-mono); font-size: var(--fs-xs); }
+</style>
