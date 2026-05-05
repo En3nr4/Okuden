@@ -1,0 +1,73 @@
+---
+interface Param {
+  name: string;
+  type: string;
+  direction: "in" | "out" | "inout";
+  description?: string;
+}
+interface Props {
+  parameters: Param[];
+}
+const { parameters } = Astro.props;
+---
+
+{parameters.length === 0 ? (
+  <p class="empty">This API takes no parameters.</p>
+) : (
+  <table class="params">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Dir</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {parameters.map((p) => (
+        <tr>
+          <td class="params__name">{p.name}</td>
+          <td class="params__type">{p.type}</td>
+          <td class="params__dir">{p.direction.toUpperCase()}</td>
+          <td class="params__desc">{p.description ?? "—"}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+)}
+
+<style>
+  .params {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--fs-sm);
+    margin: var(--sp-3) 0;
+  }
+  .params th {
+    background: var(--ink);
+    color: var(--bg);
+    text-align: left;
+    padding: var(--sp-2) var(--sp-3);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+  }
+  .params td {
+    padding: var(--sp-2) var(--sp-3);
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .params__name { font-family: var(--font-mono); font-weight: 600; }
+  .params__type { font-family: var(--font-mono); color: var(--mute); }
+  .params__dir {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+  }
+  .params__desc { color: var(--ink-soft); }
+  .empty { color: var(--mute); font-style: italic; }
+</style>
