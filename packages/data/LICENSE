@@ -1,6 +1,10 @@
-The Okuden dataset (the contents of packages/data/, including all files under
-api/, struct/, version/, schemas/, and __fixtures__/) is licensed under
-Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0).
+The Okuden dataset (the contents of packages/data/api/, packages/data/struct/,
+packages/data/version/, packages/data/schemas/, and packages/data/__fixtures__/)
+is licensed under Creative Commons Attribution-ShareAlike 4.0 International
+(CC BY-SA 4.0).
+
+Tooling under packages/data/scripts/ (e.g., validate.mjs) is excluded from this
+license and is instead MIT-licensed; its terms are identical to apps/web/LICENSE.
 
 Full legal text: https://creativecommons.org/licenses/by-sa/4.0/legalcode
 
