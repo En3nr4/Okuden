@@ -7,10 +7,17 @@ name = "okuden-ingest"
 version = "0.0.0"
 description = "Okuden ingest pipeline (stub — populated by Plan 3)."
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+  "jsonschema>=4.21",
+]
 
 [project.optional-dependencies]
-dev = []
+dev = [
+  "pytest>=8",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["okuden_ingest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
