@@ -2,5 +2,33 @@
   "name": "@okuden/web",
   "version": "0.0.0",
   "private": true,
-  "description": "Okuden static site (populated by Plan 2)."
+  "type": "module",
+  "description": "Okuden static site.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/react": "^4.2.0",
+    "@okuden/data": "workspace:*",
+    "@tailwindcss/vite": "^4.0.0",
+    "astro": "^5.0.0",
+    "cytoscape": "^3.30.0",
+    "cytoscape-cose-bilkent": "^4.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.0"
+  },
+  "devDependencies": {
+    "@types/cytoscape": "^3.21.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "pagefind": "^1.3.0",
+    "vitest": "^2.1.0"
+  }
 }

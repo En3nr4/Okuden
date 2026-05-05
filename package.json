@@ -8,7 +8,11 @@
     "pnpm": ">=9.0.0"
   },
   "scripts": {
-    "validate:data": "node packages/data/scripts/validate.mjs"
+    "validate:data": "node packages/data/scripts/validate.mjs",
+    "web:dev": "pnpm --filter @okuden/web dev",
+    "web:build": "pnpm --filter @okuden/web build",
+    "web:preview": "pnpm --filter @okuden/web preview",
+    "web:test": "pnpm --filter @okuden/web test"
   },
   "devDependencies": {
     "ajv": "^8.17.1",
