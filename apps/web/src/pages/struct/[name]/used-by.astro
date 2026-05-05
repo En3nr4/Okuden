@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import { getAllStructs, getAllApis } from "../../../lib/data";
+import { apiPath } from "../../../lib/slug";
+
+export async function getStaticPaths() {
+  const structs = await getAllStructs();
+  return structs.map((struct) => ({
+    params: { name: struct.name },
+    props: { struct },
+  }));
+}
+
+const { struct } = Astro.props;
+const allApis = new Set((await getAllApis()).map((a) => a.name));
+---
+
+<BaseLayout title={`${struct.name} used by`} description={`APIs that reference ${struct.name}.`}>
+  <Breadcrumbs
+    crumbs={[
+      { label: "structs", href: "/struct/" },
+      { label: struct.name, href: `/struct/${struct.name}/` },
+      { label: "used by" },
+    ]}
+  />
+
+  <header class="struct-header">
+    <h1>{struct.name}</h1>
+    <p class="sublead">APIs that reference this struct</p>
+  </header>
+
+  <nav class="tabs" aria-label="Struct sections">
+    <a class="tabs__tab" href={`/struct/${struct.name}/`}>Overview</a>
+    <a class="tabs__tab" href={`/struct/${struct.name}/layout/`}>Layout</a>
+    <a class="tabs__tab tabs__tab--active" href={`/struct/${struct.name}/used-by/`}>Used by</a>
+  </nav>
+
+  {struct.usedBy.length === 0 ? (
+    <p class="empty">No referencing APIs recorded yet.</p>
+  ) : (
+    <ul class="rels">
+      {struct.usedBy.map((name) => (
+        <li>
+          {allApis.has(name) ? (
+            <a href={apiPath(name)}>{name}</a>
+          ) : (
+            <span class="dim">{name}</span>
+          )}
+        </li>
+      ))}
+    </ul>
+  )}
+</BaseLayout>
+
+<style>
+  .struct-header { margin-bottom: var(--sp-3); }
+  .struct-header h1 { font-family: var(--font-display); font-size: var(--fs-xl); }
+  .sublead { color: var(--mute); font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.12em; }
+
+  .tabs {
+    display: flex; gap: 0; background: var(--ink);
+    margin: var(--sp-4) calc(var(--sp-5) * -1) var(--sp-5);
+    padding: 0 var(--sp-5);
+    border-top: 1px solid var(--border);
+  }
+  .tabs__tab {
+    color: var(--mute-soft); text-decoration: none;
+    padding: var(--sp-3) var(--sp-4);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+    border-bottom: 3px solid transparent;
+  }
+  .tabs__tab--active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .rels { list-style: none; padding: 0; margin: var(--sp-4) 0; font-family: var(--font-mono); font-size: var(--fs-sm); }
+  .rels li { padding: var(--sp-1) 0; border-bottom: 1px solid var(--border); }
+  .empty { color: var(--mute); font-style: italic; }
+  .dim { color: var(--mute); }
+  .dim::after { content: " (not in dataset yet)"; font-size: var(--fs-xs); color: var(--border); }
+</style>
