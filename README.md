@@ -19,16 +19,16 @@ Foundation phase. The monorepo, schemas, and a small hand-curated dataset are in
 
 ## Develop locally
 
-Prerequisites: Node 20+ (`.nvmrc` is honored), pnpm 9+, Python 3.12+.
+Prerequisites: Node 20+ (`.nvmrc` is honored), pnpm 9+, Python 3.12+ (ensure `python3 --version` reports 3.12 or higher).
 
 ```bash
 pnpm install
 pnpm validate:data
 
 cd packages/ingest
-python3.12 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -e .[dev]
+pip install -e '.[dev]'
 pytest
 ```
 
