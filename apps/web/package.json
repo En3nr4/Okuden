@@ -1,0 +1,6 @@
+{
+  "name": "@okuden/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Okuden static site (populated by Plan 2)."
+}

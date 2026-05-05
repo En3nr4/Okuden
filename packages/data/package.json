@@ -1,0 +1,12 @@
+{
+  "name": "@okuden/data",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Okuden dataset (JSON Schemas + JSON entries). CC BY-SA 4.0.",
+  "type": "module",
+  "exports": {
+    "./schemas/api": "./schemas/api.schema.json",
+    "./schemas/struct": "./schemas/struct.schema.json",
+    "./schemas/version": "./schemas/version.schema.json"
+  }
+}
