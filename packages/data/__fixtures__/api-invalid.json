@@ -1,0 +1,15 @@
+{
+  "name": "Not A Valid Name",
+  "dll": "wronglib",
+  "category": "FILE",
+  "description": "",
+  "prototype": "",
+  "parameters": [{ "name": "x", "type": "int", "direction": "sideways" }],
+  "returnType": "void",
+  "tags": ["bogus-tag"],
+  "usedBy": [],
+  "calls": [],
+  "structsUsed": [],
+  "examples": [],
+  "source": { "lastVerified": "not-a-date" }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "NtCreateFile",
+  "dll": "ntdll",
+  "category": "file",
+  "description": "Creates or opens a file or device.",
+  "prototype": "NTSTATUS NtCreateFile(PHANDLE FileHandle, ACCESS_MASK DesiredAccess, POBJECT_ATTRIBUTES ObjectAttributes, ...);",
+  "parameters": [
+    { "name": "FileHandle", "type": "PHANDLE", "direction": "out" }
+  ],
+  "returnType": "NTSTATUS",
+  "tags": ["syscall", "partial"],
+  "syscall": {
+    "ssn": { "win11-24h2": 85 },
+    "hash": { "djb2": "0x6c4f8b9a" }
+  },
+  "usedBy": ["CreateFileW"],
+  "calls": [],
+  "structsUsed": ["_OBJECT_ATTRIBUTES"],
+  "examples": [],
+  "source": { "lastVerified": "2026-05-05" }
+}

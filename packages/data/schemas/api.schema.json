@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://okuden.dev/schemas/api.schema.json",
+  "title": "Okuden API entry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name", "dll", "category", "description", "prototype",
+    "parameters", "returnType", "tags",
+    "usedBy", "calls", "structsUsed", "examples", "source"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+    },
+    "dll": {
+      "type": "string",
+      "enum": ["ntdll", "kernel32", "kernelbase", "advapi32", "user32", "ws2_32"]
+    },
+    "category": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "description": { "type": "string", "minLength": 1 },
+    "prototype": { "type": "string", "minLength": 1 },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "type", "direction"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "minLength": 1 },
+          "direction": { "type": "string", "enum": ["in", "out", "inout"] },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "returnType": { "type": "string", "minLength": 1 },
+    "tags": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["syscall", "undocumented", "deprecated", "partial"]
+      }
+    },
+    "syscall": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ssn"],
+      "properties": {
+        "ssn": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "hash": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]+$"
+          }
+        }
+      }
+    },
+    "usedBy": { "type": "array", "items": { "type": "string" } },
+    "calls": { "type": "array", "items": { "type": "string" } },
+    "structsUsed": { "type": "array", "items": { "type": "string" } },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["language", "title", "code"],
+        "properties": {
+          "language": { "type": "string", "enum": ["c", "asm"] },
+          "title": { "type": "string", "minLength": 1 },
+          "code": { "type": "string", "minLength": 1 },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lastVerified"],
+      "properties": {
+        "pdb": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["module", "version"],
+          "properties": {
+            "module": { "type": "string" },
+            "version": { "type": "string" }
+          }
+        },
+        "phntPath": { "type": "string" },
+        "reactosPath": { "type": "string" },
+        "winePath": { "type": "string" },
+        "j00ruRevision": { "type": "string" },
+        "lastVerified": { "type": "string", "format": "date" }
+      }
+    }
+  }
+}
