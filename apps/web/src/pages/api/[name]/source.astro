@@ -1,0 +1,59 @@
+---
+import ApiLayout from "../../../layouts/ApiLayout.astro";
+import { getAllApis } from "../../../lib/data";
+
+export async function getStaticPaths() {
+  const apis = await getAllApis();
+  return apis.map((api) => ({
+    params: { name: api.name },
+    props: { api },
+  }));
+}
+
+const { api } = Astro.props;
+const s = api.source;
+---
+
+<ApiLayout api={api} active="source">
+  <p class="lead">Provenance for the data on this page.</p>
+
+  <table class="src">
+    <tbody>
+      {s.pdb && (
+        <tr><th>PDB module</th><td class="mono">{s.pdb.module} ({s.pdb.version})</td></tr>
+      )}
+      {s.phntPath && (
+        <tr><th>phnt header</th><td class="mono">{s.phntPath}</td></tr>
+      )}
+      {s.reactosPath && (
+        <tr><th>ReactOS source</th><td class="mono">{s.reactosPath}</td></tr>
+      )}
+      {s.winePath && (
+        <tr><th>Wine source</th><td class="mono">{s.winePath}</td></tr>
+      )}
+      {s.j00ruRevision && (
+        <tr><th>j00ru tables</th><td class="mono">rev {s.j00ruRevision}</td></tr>
+      )}
+      <tr><th>Last verified</th><td class="mono">{s.lastVerified}</td></tr>
+    </tbody>
+  </table>
+
+  <p class="note">
+    Sources marked above are the ones the Okuden ingest pipeline (or the human curator) used to produce this entry.
+    If you spot a discrepancy, please open an issue on GitHub.
+  </p>
+</ApiLayout>
+
+<style>
+  .lead { color: var(--ink-soft); margin: var(--sp-3) 0 var(--sp-4); }
+  .src { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+  .src th {
+    text-align: left; padding: var(--sp-2) var(--sp-3);
+    text-transform: uppercase; letter-spacing: 0.08em; font-size: var(--fs-xs);
+    color: var(--mute); width: 180px;
+    border-bottom: 1px solid var(--border);
+  }
+  .src td { padding: var(--sp-2) var(--sp-3); border-bottom: 1px solid var(--border); }
+  .mono { font-family: var(--font-mono); }
+  .note { color: var(--mute); font-size: var(--fs-sm); margin-top: var(--sp-5); font-style: italic; }
+</style>
