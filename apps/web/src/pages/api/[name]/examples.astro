@@ -1,0 +1,39 @@
+---
+import ApiLayout from "../../../layouts/ApiLayout.astro";
+import CodeBlock from "../../../components/CodeBlock.astro";
+import { getAllApis } from "../../../lib/data";
+
+export async function getStaticPaths() {
+  const apis = await getAllApis();
+  return apis.map((api) => ({
+    params: { name: api.name },
+    props: { api },
+  }));
+}
+
+const { api } = Astro.props;
+---
+
+<ApiLayout api={api} active="examples">
+  {api.examples.length === 0 ? (
+    <p class="empty">No examples have been recorded for this API yet.</p>
+  ) : (
+    api.examples.map((ex) => (
+      <section class="example">
+        <h2>{ex.title}</h2>
+        {ex.description && <p>{ex.description}</p>}
+        <CodeBlock code={ex.code} lang={ex.language} />
+      </section>
+    ))
+  )}
+</ApiLayout>
+
+<style>
+  .empty { color: var(--mute); font-style: italic; margin-top: var(--sp-4); }
+  .example { margin: var(--sp-5) 0; }
+  .example h2 {
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: var(--fs-sm); border-bottom: 1px solid var(--border);
+    padding-bottom: var(--sp-2);
+  }
+</style>
