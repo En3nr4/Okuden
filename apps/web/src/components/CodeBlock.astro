@@ -1,0 +1,46 @@
+---
+import { Code } from "astro:components";
+
+interface Props {
+  code: string;
+  lang?: "c" | "asm" | "bash" | "json" | "ts" | "javascript" | "plaintext";
+  title?: string;
+}
+const { code, lang = "plaintext", title } = Astro.props;
+---
+
+<div class="codeblock">
+  {title && <div class="codeblock__title">{title}</div>}
+  <div class="codeblock__body">
+    <Code code={code} lang={lang} theme="github-dark" wrap={true} />
+  </div>
+</div>
+
+<style>
+  .codeblock {
+    margin: var(--sp-4) 0;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    overflow: hidden;
+  }
+  .codeblock__title {
+    background: var(--ink-soft);
+    color: var(--mute-soft);
+    font-family: var(--font-mono);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: var(--sp-2) var(--sp-3);
+    border-bottom: 1px solid var(--ink);
+  }
+  .codeblock__body {
+    padding: var(--sp-3);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+    overflow-x: auto;
+  }
+  .codeblock :global(pre) {
+    margin: 0;
+    background: transparent !important;
+  }
+</style>
