@@ -15,7 +15,7 @@ const { currentVersion = "Win11 24H2" } = Astro.props;
     <li><a href="/struct/">STRUCTS</a></li>
     <li><a href="/graph/">GRAPH</a></li>
   </ul>
-  <button class="search-trigger" type="button" aria-label="Open search (press / or cmd+k)">
+  <button class="search-trigger" type="button" aria-label="Open search (press / or cmd+k)" onclick="window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true }))">
     <span class="kbd">⌘K</span>
     <span class="search-text">Search</span>
   </button>

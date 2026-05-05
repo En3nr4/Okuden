@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import TopNav from "../components/TopNav.astro";
+import Search from "../islands/Search.tsx";
 
 interface Props {
   title: string;
@@ -27,6 +28,7 @@ const fullTitle = title === "Okuden" ? "Okuden" : `${title} · Okuden`;
     <main>
       <slot />
     </main>
+    <Search client:load />
 
     <style is:global>
       main {
