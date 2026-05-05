@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import { getAllStructs } from "../../../lib/data";
+
+export async function getStaticPaths() {
+  const structs = await getAllStructs();
+  return structs.map((struct) => ({
+    params: { name: struct.name },
+    props: { struct },
+  }));
+}
+
+const { struct } = Astro.props;
+---
+
+<BaseLayout title={struct.name} description={struct.description}>
+  <Breadcrumbs
+    crumbs={[
+      { label: "structs", href: "/struct/" },
+      { label: struct.name },
+    ]}
+  />
+
+  <header class="struct-header">
+    <h1>{struct.name}</h1>
+    <p class="lead">{struct.description}</p>
+  </header>
+
+  <nav class="tabs" aria-label="Struct sections">
+    <a class="tabs__tab tabs__tab--active" href={`/struct/${struct.name}/`}>Overview</a>
+    <a class="tabs__tab" href={`/struct/${struct.name}/layout/`}>Layout</a>
+    <a class="tabs__tab" href={`/struct/${struct.name}/used-by/`}>Used by</a>
+  </nav>
+
+  <h2>Field summary</h2>
+  <p>{struct.fields.length} field{struct.fields.length === 1 ? "" : "s"} declared.</p>
+  <ul class="fields">
+    {struct.fields.map((f) => (
+      <li>
+        <span class="fname">{f.name}</span>
+        <span class="ftype">{f.type}</span>
+        {f.description && <span class="fdesc">{f.description}</span>}
+      </li>
+    ))}
+  </ul>
+
+  <p class="hint">See the <a href={`/struct/${struct.name}/layout/`}>Layout tab</a> for offsets per Windows version.</p>
+</BaseLayout>
+
+<style>
+  .struct-header { margin-bottom: var(--sp-4); }
+  .struct-header h1 { font-family: var(--font-display); font-size: var(--fs-2xl); }
+  .lead { color: var(--ink-soft); margin-top: var(--sp-2); }
+
+  .tabs {
+    display: flex; gap: 0; background: var(--ink);
+    margin: var(--sp-4) calc(var(--sp-5) * -1) var(--sp-5);
+    padding: 0 var(--sp-5);
+    border-top: 1px solid var(--border);
+  }
+  .tabs__tab {
+    color: var(--mute-soft); text-decoration: none;
+    padding: var(--sp-3) var(--sp-4);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+    border-bottom: 3px solid transparent;
+  }
+  .tabs__tab:hover { color: var(--paper); }
+  .tabs__tab--active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  h2 {
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: var(--fs-sm); border-bottom: 1px solid var(--border);
+    padding-bottom: var(--sp-2); margin-top: var(--sp-5);
+  }
+  .fields { list-style: none; padding: 0; margin: var(--sp-3) 0; font-family: var(--font-mono); font-size: var(--fs-sm); }
+  .fields li { padding: var(--sp-1) 0; border-bottom: 1px solid var(--border); display: flex; gap: var(--sp-3); align-items: baseline; }
+  .fname { font-weight: 700; min-width: 200px; }
+  .ftype { color: var(--mute); min-width: 200px; }
+  .fdesc { color: var(--ink-soft); font-family: var(--font-body); }
+  .hint { color: var(--mute); margin-top: var(--sp-4); font-size: var(--fs-sm); }
+</style>
