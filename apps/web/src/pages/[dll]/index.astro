@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Tag from "../../components/Tag.astro";
+import { getAllApis } from "../../lib/data";
+import { apiPath, categoryPath } from "../../lib/slug";
+
+const SUPPORTED_DLLS = ["ntdll", "kernel32", "kernelbase", "advapi32", "user32", "ws2_32"] as const;
+
+export async function getStaticPaths() {
+  return SUPPORTED_DLLS.map((dll) => ({ params: { dll } }));
+}
+
+const { dll } = Astro.params;
+const apis = (await getAllApis()).filter((a) => a.dll === dll);
+const categories = [...new Set(apis.map((a) => a.category))].sort();
+---
+
+<BaseLayout title={dll!.toUpperCase()} description={`All ${dll} APIs in Okuden.`}>
+  <Breadcrumbs crumbs={[{ label: dll! }]} />
+
+  <header class="dll-header">
+    <h1>{dll!.toUpperCase()}</h1>
+    <p class="sublead">{apis.length} entr{apis.length === 1 ? "y" : "ies"} across {categories.length} categor{categories.length === 1 ? "y" : "ies"}</p>
+  </header>
+
+  {categories.length === 0 ? (
+    <p class="empty">No entries for {dll} yet. Coming as the dataset grows.</p>
+  ) : (
+    categories.map((cat) => {
+      const list = apis.filter((a) => a.category === cat);
+      return (
+        <section class="cat">
+          <h2>
+            <a href={categoryPath(dll!, cat)}>{cat}</a>
+            <span class="count">{list.length}</span>
+          </h2>
+          <div class="cards">
+            {list.map((api) => (
+              <a class="card" href={apiPath(api.name)}>
+                <div class="card__name">{api.name}</div>
+                <div class="card__tags">
+                  {api.tags.map((t) => (
+                    <Tag variant={t === "undocumented" || t === "partial" ? "accent" : "default"}>{t}</Tag>
+                  ))}
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      );
+    })
+  )}
+</BaseLayout>
+
+<style>
+  .dll-header h1 { font-family: var(--font-display); font-size: var(--fs-2xl); }
+  .sublead { color: var(--mute); margin-top: var(--sp-2); font-size: var(--fs-sm); }
+
+  .cat { margin: var(--sp-6) 0; }
+  .cat h2 {
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: var(--fs-sm); font-family: var(--font-display);
+    border-bottom: 1px solid var(--border); padding-bottom: var(--sp-2);
+    display: flex; align-items: baseline; gap: var(--sp-2);
+  }
+  .cat h2 a { text-decoration: none; }
+  .cat h2 a:hover { color: var(--accent); }
+  .count {
+    font-family: var(--font-mono); font-size: var(--fs-xs);
+    color: var(--mute); font-weight: 400;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--sp-3);
+    margin: var(--sp-3) 0;
+  }
+  .card {
+    border: 1px solid var(--border);
+    background: var(--paper);
+    padding: var(--sp-3);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .card:hover { border-color: var(--accent); }
+  .card__name {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--ink);
+    font-size: var(--fs-sm);
+  }
+  .card__tags { display: inline-flex; gap: 0; }
+  .empty { color: var(--mute); font-style: italic; margin: var(--sp-5) 0; }
+</style>

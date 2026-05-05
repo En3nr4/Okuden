@@ -1,0 +1,77 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import Breadcrumbs from "../../../components/Breadcrumbs.astro";
+import Tag from "../../../components/Tag.astro";
+import { getAllApis } from "../../../lib/data";
+import { apiPath, dllPath } from "../../../lib/slug";
+
+export async function getStaticPaths() {
+  const apis = await getAllApis();
+  const seen = new Set<string>();
+  const paths: Array<{ params: { dll: string; category: string } }> = [];
+  for (const api of apis) {
+    const key = `${api.dll}/${api.category}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    paths.push({ params: { dll: api.dll, category: api.category } });
+  }
+  return paths;
+}
+
+const { dll, category } = Astro.params;
+const apis = (await getAllApis())
+  .filter((a) => a.dll === dll && a.category === category);
+---
+
+<BaseLayout title={`${dll} · ${category}`} description={`${dll} APIs in the ${category} category.`}>
+  <Breadcrumbs
+    crumbs={[
+      { label: dll!, href: dllPath(dll!) },
+      { label: category! },
+    ]}
+  />
+
+  <header class="cat-header">
+    <h1>{category}</h1>
+    <p class="sublead">{apis.length} entr{apis.length === 1 ? "y" : "ies"} in {dll!.toUpperCase()}</p>
+  </header>
+
+  <div class="cards">
+    {apis.map((api) => (
+      <a class="card" href={apiPath(api.name)}>
+        <div class="card__name">{api.name}</div>
+        <p class="card__desc">{api.description}</p>
+        <div class="card__tags">
+          {api.tags.map((t) => (
+            <Tag variant={t === "undocumented" || t === "partial" ? "accent" : "default"}>{t}</Tag>
+          ))}
+        </div>
+      </a>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  .cat-header h1 { font-family: var(--font-display); font-size: var(--fs-xl); text-transform: lowercase; }
+  .sublead { color: var(--mute); margin-top: var(--sp-2); font-size: var(--fs-sm); font-family: var(--font-mono); }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--sp-3);
+    margin-top: var(--sp-5);
+  }
+  .card {
+    border: 1px solid var(--border);
+    background: var(--paper);
+    padding: var(--sp-3);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+  .card:hover { border-color: var(--accent); }
+  .card__name { font-family: var(--font-mono); font-weight: 700; color: var(--ink); font-size: var(--fs-sm); }
+  .card__desc { font-size: var(--fs-sm); color: var(--ink-soft); margin: 0; line-height: 1.45; }
+  .card__tags { display: inline-flex; gap: 0; margin-top: auto; }
+</style>
