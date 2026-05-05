@@ -4,6 +4,7 @@ import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import Tag from "../../components/Tag.astro";
 import { getAllApis } from "../../lib/data";
 import { apiPath, categoryPath } from "../../lib/slug";
+import Filters from "../../islands/Filters.tsx";
 
 export async function getStaticPaths() {
   const SUPPORTED_DLLS = ["ntdll", "kernel32", "kernelbase", "advapi32", "user32", "ws2_32"] as const;
@@ -26,7 +27,9 @@ const categories = [...new Set(apis.map((a) => a.category))].sort();
   {categories.length === 0 ? (
     <p class="empty">No entries for {dll} yet. Coming as the dataset grows.</p>
   ) : (
-    categories.map((cat) => {
+    <>
+      <Filters client:load selector=".card" />
+      {categories.map((cat) => {
       const list = apis.filter((a) => a.category === cat);
       return (
         <section class="cat">
@@ -36,7 +39,7 @@ const categories = [...new Set(apis.map((a) => a.category))].sort();
           </h2>
           <div class="cards">
             {list.map((api) => (
-              <a class="card" href={apiPath(api.name)}>
+              <a class="card" href={apiPath(api.name)} data-name={api.name} data-tags={api.tags.join(",")}>
                 <div class="card__name">{api.name}</div>
                 <div class="card__tags">
                   {api.tags.map((t) => (
@@ -48,7 +51,8 @@ const categories = [...new Set(apis.map((a) => a.category))].sort();
           </div>
         </section>
       );
-    })
+    })}
+    </>
   )}
 </BaseLayout>
 

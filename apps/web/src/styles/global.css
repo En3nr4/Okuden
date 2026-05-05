@@ -145,3 +145,37 @@
   appearance: none;
 }
 .version-select:hover { filter: brightness(1.1); }
+
+.filters {
+  display: flex;
+  gap: var(--sp-3);
+  align-items: center;
+  margin: var(--sp-4) 0 var(--sp-5);
+  padding: var(--sp-3);
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.filters__name {
+  flex: 1;
+  min-width: 200px;
+  background: var(--paper);
+  border: 1px solid var(--ink);
+  padding: var(--sp-2) var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+.filters__check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+.filters__check input[type="checkbox"] {
+  accent-color: var(--accent);
+}
