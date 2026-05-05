@@ -1,0 +1,47 @@
+/* Okuden design tokens — Brutalist Engineering palette.
+   The site is light-first; a future dark variant swaps these custom properties. */
+
+:root {
+  /* Surfaces */
+  --bg: #f5f3ee;          /* page background, cream */
+  --bg-alt: #ebe8e0;      /* panels, asides */
+  --paper: #ffffff;       /* high-contrast surfaces */
+  --ink: #0a0a0a;         /* primary text, top nav, code blocks */
+  --ink-soft: #1a1a1a;    /* body text variant */
+
+  /* Accent */
+  --accent: #ff3d2e;      /* single accent — borders, hover, undoc */
+
+  /* Muted */
+  --mute: #7a7468;            /* secondary text on light bg */
+  --mute-soft: #b8b3a8;       /* tertiary text on dark bg */
+  --border: #d8d4cc;          /* hairlines */
+
+  /* Typography */
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* Type scale */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.25rem;
+
+  /* Spacing scale */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-8: 3rem;
+  --sp-10: 4rem;
+
+  /* Layout */
+  --content-max: 720px;
+  --nav-height: 56px;
+}
