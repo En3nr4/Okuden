@@ -1,0 +1,97 @@
+---
+import ApiLayout from "../../../layouts/ApiLayout.astro";
+import { getAllApis, getAllStructs } from "../../../lib/data";
+import { apiPath, structPath } from "../../../lib/slug";
+
+export async function getStaticPaths() {
+  const apis = await getAllApis();
+  return apis.map((api) => ({
+    params: { name: api.name },
+    props: { api },
+  }));
+}
+
+const { api } = Astro.props;
+const allApis = new Set((await getAllApis()).map((a) => a.name));
+const allStructs = new Set((await getAllStructs()).map((s) => s.name));
+
+function apiLink(name: string) {
+  return allApis.has(name) ? apiPath(name) : null;
+}
+function structLink(name: string) {
+  return allStructs.has(name) ? structPath(name) : null;
+}
+---
+
+<ApiLayout api={api} active="used-by">
+  <section class="rels">
+    <h2>Used by</h2>
+    {api.usedBy.length === 0 ? (
+      <p class="empty">No callers recorded.</p>
+    ) : (
+      <ul>
+        {api.usedBy.map((name) => {
+          const href = apiLink(name);
+          return (
+            <li>
+              {href ? <a href={href}>{name}</a> : <span class="dim">{name}</span>}
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+
+  <section class="rels">
+    <h2>Calls</h2>
+    {api.calls.length === 0 ? (
+      <p class="empty">No callees recorded.</p>
+    ) : (
+      <ul>
+        {api.calls.map((name) => {
+          const href = apiLink(name);
+          return (
+            <li>
+              {href ? <a href={href}>{name}</a> : <span class="dim">{name}</span>}
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+
+  <section class="rels">
+    <h2>Structs used</h2>
+    {api.structsUsed.length === 0 ? (
+      <p class="empty">No structs referenced.</p>
+    ) : (
+      <ul>
+        {api.structsUsed.map((name) => {
+          const href = structLink(name);
+          return (
+            <li>
+              {href ? <a href={href}>{name}</a> : <span class="dim">{name}</span>}
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+</ApiLayout>
+
+<style>
+  .rels { margin: var(--sp-4) 0; }
+  .rels h2 {
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: var(--fs-sm); border-bottom: 1px solid var(--border);
+    padding-bottom: var(--sp-2);
+  }
+  .rels ul {
+    list-style: none; padding: 0; margin: var(--sp-3) 0;
+    font-family: var(--font-mono); font-size: var(--fs-sm);
+    display: flex; flex-direction: column; gap: var(--sp-1);
+  }
+  .empty { color: var(--mute); font-style: italic; }
+  .dim { color: var(--mute); }
+  .dim::after { content: " (not in dataset yet)"; font-size: var(--fs-xs); color: var(--border); }
+</style>
