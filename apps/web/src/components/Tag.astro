@@ -1,0 +1,37 @@
+---
+interface Props {
+  variant?: "default" | "accent" | "outline";
+  href?: string;
+}
+const { variant = "default", href } = Astro.props;
+const className = `tag tag--${variant}`;
+---
+
+{href ? (
+  <a class={className} href={href}><slot /></a>
+) : (
+  <span class={className}><slot /></span>
+)}
+
+<style>
+  .tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    text-decoration: none;
+    border-right: 1px solid var(--bg);
+  }
+  .tag:last-child { border-right: none; }
+  .tag--default { background: var(--ink); color: var(--bg); }
+  .tag--accent { background: var(--accent); color: var(--paper); }
+  .tag--outline {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  a.tag:hover { filter: brightness(1.15); }
+</style>
